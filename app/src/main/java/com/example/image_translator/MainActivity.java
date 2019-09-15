@@ -181,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("english result => " + englishResult);
 
             LinearLayout linearLayout = (LinearLayout) findViewById(R.id.resultLinearLayout);
+            linearLayout.removeAllViews();
             Context myContext = contextRef.get();
             TextView resultText = new TextView(myContext);
             resultText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
