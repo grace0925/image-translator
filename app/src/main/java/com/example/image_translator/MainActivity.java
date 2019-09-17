@@ -1,5 +1,4 @@
 package com.example.image_translator;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,6 +30,7 @@ import com.microsoft.azure.cognitiveservices.vision.computervision.models.ImageC
 import com.microsoft.azure.cognitiveservices.vision.computervision.models.ImageTag;
 import com.microsoft.azure.cognitiveservices.vision.computervision.models.LandmarksModel;
 import com.microsoft.azure.cognitiveservices.vision.computervision.models.VisualFeatureTypes;
+import com.squareup.okhttp.OkHttpClient;
 
 import org.w3c.dom.Text;
 
@@ -40,11 +40,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private Button testBtn, openCameraBtn;
+
+    String englishResult;
+
+    private Button testBtn, openCameraBtn, translateBtn;
     private ImageView dog;
 
     private String API_KEY = "47b9fd328cfe4004a79f9e3e665e37d7";
     private String API_LINK = "https://image-translator-computer-vision.cognitiveservices.azure.com/";
+
     private ComputerVisionClient client;
 
     @Override
@@ -59,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
         testBtn = (Button) findViewById(R.id.button);
         openCameraBtn = (Button) findViewById(R.id.openCamera);
+        translateBtn = (Button) findViewById(R.id.translateBtn);
         dog = (ImageView) findViewById(R.id.testImage);
 
         testBtn.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +80,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, 0);
+            }
+        });
+
+        translateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    new Translate().execute(englishResult);
+                } catch (Exception e){
+                    System.out.println("exception => " + e);
+                }
             }
         });
 
@@ -101,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
 
     public class analyzeCameraImage extends AsyncTask<MyBitMap, String, String> {
 
-        String englishResult;
         private WeakReference<Context> contextRef;
 
         public analyzeCameraImage(Context context) {
@@ -190,6 +205,8 @@ public class MainActivity extends AppCompatActivity {
             resultText.setTextSize(30);
             resultText.setGravity(Gravity.CENTER);
             linearLayout.addView(resultText);
+            translateBtn.setVisibility(View.VISIBLE);
+
         }
     }
 
@@ -227,4 +244,5 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
+
 }
